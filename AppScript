@@ -1,0 +1,27 @@
+function onChange() {
+ 
+ 
+  //Gets the active sheet
+  var ss = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+ 
+  //gets the last row on active sheet
+  var lr = ss.getLastRow();
+ 
+  //pulls the email address from the spreadsheet.  
+  var latestEmail = ss.getRange(lr, 1).getValue();
+ 
+   //references the 'init_email.html' file and grabs content; saves it to htmlMessage
+  var emailTemp = HtmlService.createTemplateFromFile("init_email");
+  var htmlMessage = emailTemp.evaluate().getContent();
+
+ 
+  //start creating everything to send email off
+  var recipient = latestEmail;  //latest signup email address
+  var subject = "Welcome to Intro to Python"; //subject of email they will receive
+  var myAttachment = DriveApp.getFilesByName("pythonSoftware.pdf"); //gets file for attachment
+ 
+  if(myAttachment.hasNext()){
+  	var options = { htmlBody: htmlMessage, attachments: [myAttachment.next().getAs(MimeType.PDF)]};  //creates the body and attachment to email
+  	GmailApp.sendEmail(recipient, subject,"Your email requires HTML Support.",options); //compiles email together abd sends it
+  }
+}
