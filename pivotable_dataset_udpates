@@ -1,0 +1,26 @@
+function updateDatasetsFromPivotTable() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var pivotSheet = ss.getSheetByName("Pivot Table"); // Change to the name of your pivot sheet
+  var datasetNames = ["Dataset1", "Dataset2", "Dataset3"]; // Add the names of your dataset sheets
+
+  // Get the data range from the pivot table
+  var pivotDataRange = pivotSheet.getDataRange();
+  var pivotValues = pivotDataRange.getValues();
+
+  // Loop through each dataset and update it
+  for (var i = 0; i < datasetNames.length; i++) {
+    var datasetName = datasetNames[i];
+    var datasetSheet = ss.getSheetByName(datasetName);
+
+    // Clear the existing data in the dataset sheet
+    datasetSheet.clear();
+
+    // Copy data from the pivot table to the dataset sheet
+    datasetSheet.getRange(1, 1, pivotValues.length, pivotValues[0].length).setValues(pivotValues);
+
+    // Optionally, you can format or manipulate the data further here if needed
+
+    // Log that the update is complete for the current dataset
+    Logger.log("Dataset '" + datasetName + "' updated from Pivot Table.");
+  }
+}
